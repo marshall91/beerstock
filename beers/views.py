@@ -122,7 +122,7 @@ def add_new_beer(request):
 @login_required
 def add_new_brewery(request):
 	if request.method == "POST":
-		brewery = Brewery()
+		brewery = Brewery(uniqueBeers=0)
 		form = BreweryForm(request.POST,instance=brewery)
 		new_brewery = form.save()
 		return render_to_response('beers/success.html')
