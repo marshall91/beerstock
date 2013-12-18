@@ -1,0 +1,19 @@
+<head>
+<title>BeerStock - Add Beer</title>
+<style>
+	form {
+		display: block;
+	}
+</style>
+</head>
+
+<body bgcolor="silver">
+	{% include "beers/toolbar.html" %}
+	<form method="post">
+	{% csrf_token %}
+			{% for i in formset %}
+				<p align="center">{{ i.label }} {{ i }}</p>
+			{% endfor %}
+			<p align="center"><input type="submit" value="Add beer!"></p>
+	</form>
+</body>

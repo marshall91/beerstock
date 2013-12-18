@@ -1,0 +1,23 @@
+<head>
+<title>BeerStock - Brewery Index</title>
+</head>
+
+<body bgcolor="silver">
+{% include "beers/toolbar.html" %}
+{% if all_brewery_list %}
+	<table border="1" align="center" id='table'>
+		<thead>
+			<td><b>Name</b></td>
+			<td><b>Location</b></td>
+		</thead>
+	{% for brewery in all_brewery_list %}
+		<tr>
+			<td><a href="/beers/brewery_info/{{ brewery.name }}/">{{ brewery.name }}</a></td>
+			<td>{{ brewery.location }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% else %}
+	<p align="center">No breweries are available.</p>
+{% endif %}
+</body>

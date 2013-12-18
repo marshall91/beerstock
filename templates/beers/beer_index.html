@@ -1,0 +1,33 @@
+<head>
+	<title>BeerStock - Beer History</title>
+</head>
+
+<body bgcolor="silver">
+{% include "beers/toolbar.html" %}
+{% if all_beer_list %}
+	<table border="1" align="center" id='table'>
+		<thead>
+			<td><b>Name</b></td>
+			<td><b>Brewery</b></td>
+			<td><b>Type</b></td>
+			<td><b>History</b></td>
+		</thead>
+	{% for beer in all_beer_list %}
+		<tr>
+			<td><a href="/beers/beer_info/{{ beer.name }}/">{{ beer.name }}</a></td>
+			<td><a href="/beers/brewery_info/{{ beer.brewery }}/">{{ beer.brewery }}</a></td>
+			<td><a href="/beers/beer_type_info/{{ beer.beerType }}/">{{ beer.beerType }}</a></td>
+			<td>{{ beer.amountConsumed }}
+		</tr>
+	{% endfor %}
+	</table>
+	<script>
+		$(document).ready(function() {
+			$('#table').dataTable();
+		} );
+	</script>
+{% else %}
+	<p align="center">No beers are available.</p>
+{% endif %}
+
+</body>
