@@ -1,0 +1,22 @@
+<head>
+<title>BeerStock - Beer Update</title>
+</head>
+
+<body bgcolor="silver">
+	{% include "beers/toolbar.html" %}
+	{% if beer %}
+		<p align="center"><img src={{ beer.imgUrl }}></p>
+		<p align="center"><b>Name: </b>{{ beer.name }}</p>
+		<p align="center"><b>Brewery: </b>{{ beer.breweryName }}</p>
+		<p align="center"><b>Style: </b>{{ beer.style }}</p>
+		<p align="center"><b>ABV: </b>{{ beer.abv }}</p>
+		<p align="center"><b>History: </b>{{ stock.amountDrank }}</p>
+		<p align="center"><b>Stock: </b>{{ stock.amountInStock }}</p>
+		<form method="post">
+			{% csrf_token %}
+			<p align="center"><input type="submit" value="Checkout Beer"></p>
+		</form>
+	{% else %}
+		<p align="center">No beer available.</p>
+	{% endif %}
+</body>

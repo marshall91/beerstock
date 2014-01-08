@@ -91,9 +91,6 @@ def update_beer(request, bid):
 		stock.amountDrank = newHistory
 		stock.amountInStock = newStock
 		stock.save()
-		
-		history = HistoryTable(owner=user, untappdId=beer.untappdId, beerName=beer.name)
-		history.save()
 		return render_to_response('beers/success.html')
 	else:
 		beer = BeerTable.objects.get(untappdId=bid)
@@ -127,4 +124,23 @@ def history_index(request):
 		'user' : request.user,
 	})
 	return HttpResponse(template.render(context))
-		
+	
+@login_required
+def checkout_beer(request, bid):
+	beer = BeerTable.objects.get(untappdId=bid)
+	stock = StockTable.objects.get(untappdId=beer.untappdId, owner=request.user)
+	if request.method == "POST":
+		stock.amountDrank += 1
+		stock.amountInStock -= 1
+		stock.save()
+		history = HistoryTable(owner=request.user, untappdId=beer.untappdId, beerName=beer.name)
+		history.save()
+		return render_to_response('beers/success.html')
+	else:
+		context = Context({
+			'beer': beer,
+			'stock': stock,
+			'user': request.user,
+		})
+		return render_to_response('beers/untappd_beer_checkout.html', context, RequestContext(request))
+	
