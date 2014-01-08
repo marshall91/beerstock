@@ -21,7 +21,6 @@ def logged_out(request):
 @login_required
 def search_beer(request):
 	if request.method == "POST":
-		f = open("/Users/mackenziemarshall/Projects/beerstock2.0/log.txt", "w")
 		beer = request.POST.get("beername", "")
 		params = urllib.urlencode({'client_id': clientId, 'client_secret': clientSecret, 'q': beer, 'sort': 'count'}) 
 		conn = httplib.HTTPConnection("api.untappd.com")
@@ -71,8 +70,6 @@ def search_beer(request):
 				'user' : request.user,
 			})
 			return render_to_response('beers/beer_list.html', context, RequestContext(request))
-		else:
-			f.write("Failed\n")
 		 
 	else:
 		context = Context({
