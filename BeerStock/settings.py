@@ -14,10 +14,10 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME':     'cdb_4c5bf54043', #'/var/www/html/beerstock/database.db',                      # Or path to database file if using sqlite3.
-        'NAME':     '/Users/mackenziemarshall/Projects/beerstock2.0/data.db',
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        #'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':     'cdb_4c5bf54043', #'/var/www/html/beerstock/database.db',                      # Or path to database file if using sqlite3.
+        #'NAME':     '/Users/mackenziemarshall/Projects/beerstock2.0/data.db',
         'USER': 'be10e6da6bf0bd',                      # Not used with sqlite3.
         'PASSWORD': 'cd0ae2e4',                  # Not used with sqlite3.
         'HOST': 'us-cdbr-azure-west-b.cleardb.com',                      # Set to empty string for localhost. Not used with sqlite3.
