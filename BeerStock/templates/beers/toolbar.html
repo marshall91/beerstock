@@ -45,17 +45,9 @@
 </head>
 <nav>
 	<ul class='dropdown'>
-		<li><a href="#">Add</a>
-			<ul>
-				<li><a href="/beers/add_new_beer">Beer</a></li>
-				<li><a href="/beers/add_new_brewery">Brewery</a></li>
-				<li><a href="/beers/add_new_type">Beer Type</a></li>
-			</ul>
-		</li>
+		<li><a href="/beers/search_beer">Search</a></li>
 		<li><a href="/beers/stock_index">Stock</a></li>
-		<li><a href="/beers/beer_index">History</a></li>
-		<li><a href="/beers/brewery_index">Breweries</a></li>
-		<li><a href="/beers/beer_type_index">Beer Types</a></li>
+		<li><a href="/beers/history_index">History</a></li>
 		{% if user %}
 			{% if user.username == "" %}
 				<li><a href="/beers/login">Sign In</a></li>

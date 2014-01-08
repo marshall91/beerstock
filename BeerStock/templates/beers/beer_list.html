@@ -1,0 +1,34 @@
+<head>
+<title>BeerStock - Beer Search Results</title>
+</head>
+
+<body bgcolor="silver">
+	{% include "beers/toolbar.html" %}
+	<form method="post">
+		{% csrf_token %}
+		<p align="center"><input type="text" name="beername"></p>
+		<p align="center"><input type="submit" value="Add beer!"></p>
+	</form>
+	{% if beer_list %}
+		<table border="1" align="center" id='table'>
+			<thead>
+				<td></td>
+				<td><b>Name</b></td>
+				<td><b>Style</b></td>
+				<td><b>Abv</b></td>
+				<td><b>Brewery</b></td>
+			</thead>
+		{% for beer in beer_list %}
+			<tr>
+				<td><img src={{ beer.imgUrl }} height=90px width=90px></td>
+				<td><a href="/beers/update_beer/{{ beer.untappdId }}">{{ beer.name }}</a></td>
+				<td>{{ beer.style }}</td>
+				<td>{{ beer.abv }}</td>
+				<td>{{ beer.breweryName }}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	{% else %}
+		<p>No results available.</p>
+	{% endif %}
+</body>

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from beers.models import Brewery, Type ,Beer
+from beers.models import BeerTable, StockTable, HistoryTable
 
-admin.site.register(Beer)
-admin.site.register(Brewery)
-admin.site.register(Type)
+admin.site.register(BeerTable)
+admin.site.register(StockTable)
+admin.site.register(HistoryTable)

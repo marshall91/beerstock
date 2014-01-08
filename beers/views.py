@@ -8,142 +8,126 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from beers.models import Beer, Brewery, Type, BeerForm, BreweryForm, TypeForm
+from beers.models import BeerTable, StockTable, HistoryTable
+
+import httplib, urllib, json
+
+clientId = "CF9D45955B760732A44FE2E836228BF53AC26763"
+clientSecret = "805F76302BD227868AF94F897EE041E82E4DE611"
+	
+def logged_out(request):
+	return render_to_response('beers/logout_success.html')
+		
+@login_required
+def search_beer(request):
+	if request.method == "POST":
+		f = open("/Users/mackenziemarshall/Projects/beerstock2.0/log.txt", "w")
+		beer = request.POST.get("beername", "")
+		params = urllib.urlencode({'client_id': clientId, 'client_secret': clientSecret, 'q': beer, 'sort': 'count'}) 
+		conn = httplib.HTTPConnection("api.untappd.com")
+		conn.request("GET", "/v4/search/beer?"+params)
+		response = conn.getresponse() 
+		jsonResponse = json.loads(response.read())
+		conn.close()
+		
+		if jsonResponse['meta']['code'] == 200:
+			beer_list = []
+			for entry in jsonResponse['response']['beers']['items']:
+				newBeer = BeerTable()
+				newBeer.untappdId = entry['beer']['bid']
+				newBeer.name = entry['beer']['beer_name']
+				newBeer.style = entry['beer']['beer_style']
+				newBeer.imgUrl = entry['beer']['beer_label']
+				newBeer.abv = entry['beer']['beer_abv']
+				newBeer.breweryName = entry['brewery']['brewery_name']
+				newBeer.breweryId = entry['brewery']['brewery_id']
+				try:
+					dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)	
+				except ObjectDoesNotExist:
+					newBeer.save()
+				dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)
+				newBeer.id = dbBeer.id
+				beer_list.append(newBeer)
+			
+			for entry in jsonResponse['response']['homebrew']['items']:
+				newBeer = BeerTable()
+				newBeer.untappdId = entry['beer']['bid']
+				newBeer.name = entry['beer']['beer_name']
+				newBeer.style = entry['beer']['beer_style']
+				newBeer.imgUrl = entry['beer']['beer_label']
+				newBeer.abv = entry['beer']['beer_abv']
+				newBeer.breweryName = entry['brewery']['brewery_name']
+				newBeer.breweryId = entry['brewery']['brewery_id']
+				try:
+					dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)	
+				except ObjectDoesNotExist:
+					newBeer.save()
+				dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)
+				newBeer.id = dbBeer.id
+				beer_list.append(newBeer)
+				
+			context = Context({
+				'beer_list': beer_list,
+				'user' : request.user,
+			})
+			return render_to_response('beers/beer_list.html', context, RequestContext(request))
+		else:
+			f.write("Failed\n")
+		 
+	else:
+		context = Context({
+		})
+		return render_to_response('beers/untappd_beer_form.html', context, RequestContext(request))
+		
+@login_required
+def update_beer(request, bid):
+	if request.method == "POST":
+		user = request.user
+		beer = BeerTable.objects.get(untappdId=bid)	
+		newHistory = request.POST.get("history", "")
+		newStock = request.POST.get("stock", "")
+		try:
+			stock = StockTable.objects.get(untappdId=beer.untappdId, owner=user)
+		except ObjectDoesNotExist:
+			stock = StockTable(amountDrank=0,amountInStock=0, owner=user, untappdId=beer.untappdId)
+		stock.beerName = beer.name
+		stock.amountDrank = newHistory
+		stock.amountInStock = newStock
+		stock.save()
+		
+		history = HistoryTable(owner=user, untappdId=beer.untappdId, beerName=beer.name)
+		history.save()
+		return render_to_response('beers/success.html')
+	else:
+		beer = BeerTable.objects.get(untappdId=bid)
+		try:
+			stock = StockTable.objects.get(untappdId=beer.untappdId, owner=request.user)
+		except ObjectDoesNotExist:
+			stock = StockTable(amountDrank=0,amountInStock=0)
+		context = Context({
+			'beer': beer,
+			'stock': stock,
+			'user': request.user,
+		})
+		return render_to_response('beers/untappd_beer_update.html', context, RequestContext(request))
 
 @login_required
 def stock_index(request):
-	all_beer_list = Beer.objects.filter(owner=request.user, amountInFridge__gt=0)
+	all_beer_list = StockTable.objects.filter(owner=request.user, amountInStock__gt=0)
 	template = loader.get_template('beers/stock_index.html')
 	context = Context({
 		'all_beer_list': all_beer_list,
 		'user' : request.user,
 	})
 	return HttpResponse(template.render(context))
-
-@login_required	
-def beer_index(request):
-	all_beer_list = Beer.objects.filter(owner=request.user, amountConsumed__gt=0)
-	template = loader.get_template('beers/beer_index.html')
+	
+@login_required
+def history_index(request):
+	all_beer_list = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')
+	template = loader.get_template('beers/history_index.html')
 	context = Context({
 		'all_beer_list': all_beer_list,
 		'user' : request.user,
 	})
 	return HttpResponse(template.render(context))
-
-@login_required	
-def brewery_index(request):
-	all_brewery_list = Brewery.objects.all()
-	template = loader.get_template('beers/brewery_index.html')
-	context = Context({
-		'all_brewery_list': all_brewery_list,
-		'user' : request.user,
-	})
-	return HttpResponse(template.render(context))
-
-@login_required
-def beer_type_index(request):
-	all_beer_type_list = Type.objects.all()
-	template = loader.get_template('beers/beer_type_index.html')
-	context = Context({
-		'all_beer_type_list': all_beer_type_list,
-		'user' : request.user,
-	})
-	return HttpResponse(template.render(context))
-
-@login_required	
-def beer_detail(request, beer_name):
-	try:
-		beer = Beer.objects.get(name=beer_name, owner=request.user)
-		if request.method == "POST":
-			beer.amountConsumed = beer.amountConsumed + 1
-			beer.amountInFridge = beer.amountInFridge - 1
-			beer.save()
-			return render_to_response('beers/success.html')
-		else:
-			template = loader.get_template('beers/beer_info.html')
-			context = Context({
-				'beer' : beer,
-				'user' : request.user,
-			})
-			return render_to_response('beers/beer_info.html', context, RequestContext(request))
-	except ObjectDoesNotExist:
-		beer = Beer.objects.get(name=beer_name)
-		beer.amountConsumed = 0
-		beer.amountInFridge = 0
-		template = loader.get_template('beers/beer_info.html')
-		context = Context({
-			'beer' : beer,
-			'user' : request.user,
-		})
-		return render_to_response('beers/beer_info.html', context, RequestContext(request))
-
-@login_required
-def brewery_detail(request, brewery_name):
-	brewery = Brewery.objects.get(name=brewery_name)
-	beer_list = Beer.objects.filter(brewery=brewery.id).values('name','brewery__name','beerType__name').distinct()
-	template = loader.get_template('beers/brewery_info.html')
-	context = Context({
-		'brewery' : brewery,
-		'beer_list' : beer_list,
-		'user' : request.user,
-	})
-	return HttpResponse(template.render(context))
-
-@login_required	
-def beer_type_detail(request, beer_type_name):
-	beer_type = Type.objects.get(name=beer_type_name)
-	beer_list = Beer.objects.filter(beerType=beer_type.id).values('name','brewery__name','beerType__name').distinct()
-	template = loader.get_template('beers/beer_type_info.html')
-	context = Context({
-		'beer_type' : beer_type,
-		'beer_list' : beer_list,
-		'user' : request.user,
-	})
-	return HttpResponse(template.render(context))	
-	
-def logged_out(request):
-	return render_to_response('beers/logout_success.html')
-	
-@login_required
-def add_new_beer(request):
-	if request.method == "POST":
-		user = request.user
-		beer = Beer(owner=user)
-		form = BeerForm(request.POST,instance=beer)
-		new_beer = form.save()
-		return render_to_response('beers/success.html')
-	else:
-		formset = BeerForm()
-		context = Context({
-			'formset' : formset,
-		})
-		return render_to_response('beers/beer_form.html', context, RequestContext(request))
-
-@login_required
-def add_new_brewery(request):
-	if request.method == "POST":
-		brewery = Brewery(uniqueBeers=0)
-		form = BreweryForm(request.POST,instance=brewery)
-		new_brewery = form.save()
-		return render_to_response('beers/success.html')
-	else:
-		formset = BreweryForm()
-		context = Context({
-			'formset' : formset,
-		})
-		return render_to_response('beers/brewery_form.html', context, RequestContext(request))
-		
-@login_required
-def add_new_type(request):
-	if request.method == "POST":
-		type = Type()
-		form = TypeForm(request.POST,instance=type)
-		new_type = form.save()
-		return render_to_response('beers/success.html')
-	else:
-		formset = TypeForm()
-		context = Context({
-			'formset' : formset,
-		})
-		return render_to_response('beers/beer_type_form.html', context, RequestContext(request))
 		

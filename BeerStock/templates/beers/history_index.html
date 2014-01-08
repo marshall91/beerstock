@@ -8,12 +8,12 @@
 	<table border="1" align="center" id='table'>
 		<thead>
 			<td><b>Name</b></td>
-			<td><b>Stock</b></td>
+			<td><b>Date</b></td>
 		</thead>
 	{% for beer in all_beer_list %}
 		<tr>
 			<td><a href="/beers/update_beer/{{ beer.untappdId }}/">{{ beer.beerName }}</a></td>
-			<td>{{ beer.amountInStock }}
+			<td>{{ beer.timestamp }}
 		</tr>
 	{% endfor %}
 	</table>
