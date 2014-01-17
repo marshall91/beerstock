@@ -159,8 +159,8 @@ def account_info(request):
 	})
 	return HttpResponse(template.render(context))
 	
-def account_update(request, code):
-	token = code
+def account_update(request):
+	token = request.GET.get('code')
 	try:
 		member = MemberTable.objects.get(user=request.user)
 	except ObjectDoesNotExist:
