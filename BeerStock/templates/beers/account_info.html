@@ -4,6 +4,7 @@
 
 <body bgcolor="silver">
 	{% include "beers/toolbar.html" %}
-	<p>Welcome {{ user.username }}</p>
-	<a href="https://untappd.com/oauth/authenticate/?client_id={{ CLIENTID }}&response_type=code&redirect_url={{ REDIRECT_URL }}">Link Untappd Account</a>
+	<p align="center">Welcome {{ user.username }}<br>
+		<a href="https://untappd.com/oauth/authenticate/?client_id={{ CLIENTID }}&response_type=code&redirect_url={{ REDIRECT_URL }}">Link Untappd Account</a>
+		</p>
 </body>

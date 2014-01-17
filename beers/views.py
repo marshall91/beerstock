@@ -138,6 +138,17 @@ def checkout_beer(request, bid):
 		stock.save()
 		history = HistoryTable(owner=request.user, untappdId=beer.untappdId, beerName=beer.name)
 		history.save()
+		untappdCheckout = request.POST.get("untappdCheckout", "")
+		print untappdCheckout
+		if(untappdCheckout):
+			member = MemberTable.objects.get(user=request.user)
+			params = urllib.urlencode({'access_token': member.untappdAuth, 'gmt_offset': member.gmtOffset, 'timezone': member.timezone, 'bid': bid}) 
+			conn = httplib.HTTPConnection("api.untappd.com")
+			conn.request("POST", "/v4/checkin/add?"+params)
+			response = conn.getresponse() 
+			jsonResponse = json.loads(response.read())
+			conn.close()
+			
 		context = Context({
 			'user' : request.user,
 		})

@@ -14,7 +14,9 @@
 		<p align="center"><b>Stock: </b>{{ stock.amountInStock }}</p>
 		<form method="post">
 			{% csrf_token %}
-			<p align="center"><input type="submit" value="Checkout Beer"></p>
+			<p align="center">
+				<input type="checkbox" name="untappdCheckout" value="untappdCheckout">Also checkout on Untappd<br>
+				<input type="submit" value="Checkout Beer"></p>
 		</form>
 	{% else %}
 		<p align="center">No beer available.</p>
