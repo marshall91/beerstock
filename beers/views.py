@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from beers.models import BeerTable, StockTable, HistoryTable
+from beers.models import BeerTable, StockTable, HistoryTable, MemberTable
 
 import httplib, urllib, json
 
@@ -149,4 +149,26 @@ def checkout_beer(request, bid):
 			'user': request.user,
 		})
 		return render_to_response('beers/untappd_beer_checkout.html', context, RequestContext(request))
+		
+def account_info(request):
+	template = loader.get_template('beers/account_info.html')
+	context = Context({
+		'CLIENTID' : clientId,
+		'REDIRECT_URL' : "http://www.beerstock.ca/beers/account_info",
+		'user' : request.user,
+	})
+	return HttpResponse(template.render(context))
+	
+def account_update(request, code):
+	token = code
+	try:
+		member = MemberTable.objects.get(user=request.user)
+	except ObjectDoesNotExist:
+		member = MemberTable(user=request.user)
+	member.untappdAuth = token
+	member.save()
+	context = Context({
+		'user' : request.user,
+	})
+	return render_to_response('beers/success.html', context)
 	

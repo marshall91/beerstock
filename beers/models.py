@@ -28,4 +28,8 @@ class HistoryTable(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
 	note = models.CharField(max_length=1000)
 	
-	
+class MemberTable(models.Model):
+	user = models.ForeignKey(User)
+	untappdAuth = models.CharField(max_length=1000)
+	gmtOffset = models.IntegerField(default=-8)
+	timezone = models.CharField(max_length=10, default='PST')
