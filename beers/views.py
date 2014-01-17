@@ -154,7 +154,7 @@ def account_info(request):
 	template = loader.get_template('beers/account_info.html')
 	context = Context({
 		'CLIENTID' : clientId,
-		'REDIRECT_URL' : "http://www.beerstock.ca/beers/account_info",
+		'REDIRECT_URL' : "http://www.beerstock.ca/beers/account_auth",
 		'user' : request.user,
 	})
 	return HttpResponse(template.render(context))
