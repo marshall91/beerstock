@@ -171,7 +171,17 @@ def account_info(request):
 	return HttpResponse(template.render(context))
 	
 def account_update(request):
-	token = request.GET.get('code')
+	code = request.GET.get('code')
+	params = urllib.urlencode({'client_id': clientId, 'client_secret': clientSecret, 'reponse_type': 'code', 'redirect_url' : "http://www.beerstock.ca/beers/account_auth", 'code': code}) 
+	conn = httplib.HTTPConnection("https://untappd.com")
+	conn.request("GET", "/oauth/authorize/?"+params)
+	response = conn.getresponse() 
+	jsonResponse = json.loads(response.read())
+	conn.close()
+	if jsonResponse['meta']['code'] == 200:
+		token = jsonResponse['response']['access_token']
+	else:
+		token = "null"
 	try:
 		member = MemberTable.objects.get(user=request.user)
 	except ObjectDoesNotExist:
