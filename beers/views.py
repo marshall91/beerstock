@@ -178,7 +178,7 @@ def account_update(request):
 	response = conn.getresponse() 
 	jsonResponse = json.loads(response.read())
 	conn.close()
-	if jsonResponse['meta']['code'] == 200:
+	if jsonResponse['meta']['http_code'] == 200:
 		token = jsonResponse['response']['access_token']
 	else:
 		token = "null"
