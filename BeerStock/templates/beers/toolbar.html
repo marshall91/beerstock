@@ -8,10 +8,15 @@
 	<script type="text/javascript" language="javascript" src="/static/js/dropit.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function() {
-			$('#table').dataTable();
-		} );
-		$(document).ready(function() {
 			$('.dropdown').dropit();
+		});
+		$(document).ready(function() {
+			$('#histTable').dataTable({
+				"aaSorting": [[ 1, "desc" ]],
+			});
+		});
+		$(document).ready(function() {
+			$('#table').dataTable();
 		});
 	</script>
 	<style>

@@ -5,7 +5,7 @@
 <body bgcolor="silver">
 {% include "beers/toolbar.html" %}
 {% if all_beer_list %}
-	<table border="1" align="center" id='table'>
+	<table border="1" align="center" id='histTable'>
 		<thead>
 			<td><b>Name</b></td>
 			<td><b>Date</b></td>
@@ -13,7 +13,7 @@
 	{% for beer in all_beer_list %}
 		<tr>
 			<td><a href="/beers/update_beer/{{ beer.untappdId }}/">{{ beer.beerName }}</a></td>
-			<td>{{ beer.timestamp }}
+			<td>{{ beer.timestamp | date:"Y/m/d - G:i" }}
 		</tr>
 	{% endfor %}
 	</table>
