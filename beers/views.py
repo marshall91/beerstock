@@ -139,15 +139,22 @@ def checkout_beer(request, bid):
 		history = HistoryTable(owner=request.user, untappdId=beer.untappdId, beerName=beer.name)
 		history.save()
 		untappdCheckout = request.POST.get("untappdCheckout", "")
-		print untappdCheckout
 		if(untappdCheckout):
 			member = MemberTable.objects.get(user=request.user)
-			params = urllib.urlencode({'access_token': member.untappdAuth, 'gmt_offset': member.gmtOffset, 'timezone': member.timezone, 'bid': bid}) 
+			params = urllib.urlencode({'gmt_offset': -8, 'timezone': 'PST', 'bid': bid})
+			token = urllib.urlencode({'access_token': member.untappdAuth})
 			conn = httplib.HTTPConnection("api.untappd.com")
-			conn.request("POST", "/v4/checkin/add?"+params)
+			conn.request("POST", "/v4/checkin/add?access_token="+member.untappdAuth, params)
 			response = conn.getresponse() 
 			jsonResponse = json.loads(response.read())
 			conn.close()
+			if jsonResponse['meta']['code'] == 500:
+				failure = json.dumps(jsonResponse, sort_keys=True, indent=4, separators=(',', ': '))
+				context = Context({
+					'user' : request.user,
+					'response' : failure,
+				})
+				return render_to_response('beers/failed.html', context)
 			
 		context = Context({
 			'user' : request.user,
