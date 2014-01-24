@@ -1,9 +1,9 @@
 <head>
 <title>BeerStock - Login Page</title>
 </head>
+{% include "beers/toolbar.html" %}
 
 <body bgcolor="silver">
-{% include "beers/toolbar.html" %}	
 	<form name="login" method="post" align='center' style="padding-top: 10px">
 	{% csrf_token %}
 	Username: <input type="text" name="username">
@@ -11,3 +11,4 @@
 	<input type="submit" value="Submit">
 	</form>
 </body>
+{% include "beers/footer.html" %}

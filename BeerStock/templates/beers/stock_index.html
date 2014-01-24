@@ -1,9 +1,8 @@
 <head>
 <title>BeerStock - Fridge Stock</title>
 </head>
-
-<body bgcolor="silver">
 {% include "beers/toolbar.html" %}
+<body bgcolor="silver">
 {% if all_beer_list %}
 	<table border="1" align="center" id='table'>
 		<thead>
@@ -23,3 +22,4 @@
 	<p align="center">No beers are available.</p>
 {% endif %}
 </body>
+{% include "beers/footer.html" %}

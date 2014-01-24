@@ -1,9 +1,9 @@
 <head>
 <title>BeerStock - Beer Search Results</title>
 </head>
+{% include "beers/toolbar.html" %}
 
 <body bgcolor="silver">
-	{% include "beers/toolbar.html" %}
 	<form method="post">
 		{% csrf_token %}
 		<p align="center"><input type="text" name="beername"></p>
@@ -32,3 +32,4 @@
 		<p>No results available.</p>
 	{% endif %}
 </body>
+{% include "beers/footer.html" %}

@@ -1,9 +1,9 @@
 <head>
 <title>BeerStock - Beer Update</title>
 </head>
+{% include "beers/toolbar.html" %}
 
 <body bgcolor="silver">
-	{% include "beers/toolbar.html" %}
 	{% if beer %}
 		<p align="center"><img src={{ beer.imgUrl }}></p>
 		<p align="center"><b>Name: </b>{{ beer.name }}</p>
@@ -22,3 +22,4 @@
 		<p align="center">No beer available.</p>
 	{% endif %}
 </body>
+{% include "beers/footer.html" %}
