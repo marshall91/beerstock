@@ -5,7 +5,10 @@
 
 <body bgcolor="silver">
 	<p align="center">Welcome {{ user.username }}<br>
-		<a href="https://untappd.com/oauth/authenticate/?client_id={{ CLIENTID }}&response_type=code&redirect_url={{ REDIRECT_URL }}">Link Untappd Account</a>
+		Link Untappd Account<br>
+		<a href="https://untappd.com/oauth/authenticate/?client_id={{ CLIENTID }}&response_type=code&redirect_url={{ REDIRECT_URL }}">
+			<img src="/static/images/ut_icon.png">
+		</a>
 		</p>
 </body>
 {% include "beers/footer.html" %}
