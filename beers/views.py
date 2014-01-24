@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from beers.models import BeerTable, StockTable, HistoryTable, MemberTable
 
-import httplib, urllib, json
+import httplib, urllib, urllib2, json
 
 clientId = "CF9D45955B760732A44FE2E836228BF53AC26763"
 clientSecret = "805F76302BD227868AF94F897EE041E82E4DE611"
@@ -142,12 +142,10 @@ def checkout_beer(request, bid):
 		if(untappdCheckout):
 			member = MemberTable.objects.get(user=request.user)
 			params = urllib.urlencode({'gmt_offset': -8, 'timezone': 'PST', 'bid': bid})
-			token = urllib.urlencode({'access_token': member.untappdAuth})
-			conn = httplib.HTTPConnection("api.untappd.com")
-			conn.request("POST", "/v4/checkin/add?access_token="+member.untappdAuth, params)
-			response = conn.getresponse() 
-			jsonResponse = json.loads(response.read())
-			conn.close()
+			url = "http://api.untappd.com/v4/checkin/add?access_token="+member.untappdAuth
+			response = urllib2.urlopen(url, params).read()
+			jsonResponse = json.loads(response)
+			
 			if jsonResponse['meta']['code'] == 500:
 				failure = json.dumps(jsonResponse, sort_keys=True, indent=4, separators=(',', ': '))
 				context = Context({
