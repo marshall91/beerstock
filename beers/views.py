@@ -9,11 +9,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from beers.models import BeerTable, StockTable, HistoryTable, MemberTable
+from Untappd import *
 
 import httplib, urllib, urllib2, json
-
-clientId = "CF9D45955B760732A44FE2E836228BF53AC26763"
-clientSecret = "805F76302BD227868AF94F897EE041E82E4DE611"
 	
 def logged_out(request):
 	return render_to_response('beers/logout_success.html')
@@ -22,47 +20,17 @@ def logged_out(request):
 def search_beer(request):
 	if request.method == "POST":
 		beer = request.POST.get("beername", "")
-		params = urllib.urlencode({'client_id': clientId, 'client_secret': clientSecret, 'q': beer, 'sort': 'count'}) 
-		conn = httplib.HTTPConnection("api.untappd.com")
-		conn.request("GET", "/v4/search/beer?"+params)
-		response = conn.getresponse() 
-		jsonResponse = json.loads(response.read())
-		conn.close()
 		
-		if jsonResponse['meta']['code'] == 200:
+		untappdResponse = UntappdSearch(beer)
+		
+		if untappdResponse['meta']['code'] == 200:
 			beer_list = []
-			for entry in jsonResponse['response']['beers']['items']:
-				newBeer = BeerTable()
-				newBeer.untappdId = entry['beer']['bid']
-				newBeer.name = entry['beer']['beer_name']
-				newBeer.style = entry['beer']['beer_style']
-				newBeer.imgUrl = entry['beer']['beer_label']
-				newBeer.abv = entry['beer']['beer_abv']
-				newBeer.breweryName = entry['brewery']['brewery_name']
-				newBeer.breweryId = entry['brewery']['brewery_id']
-				try:
-					dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)	
-				except ObjectDoesNotExist:
-					newBeer.save()
-				dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)
-				newBeer.id = dbBeer.id
+			for entry in untappdResponse['response']['beers']['items']:
+				newBeer = JsonToBeer(entry)
 				beer_list.append(newBeer)
 			
-			for entry in jsonResponse['response']['homebrew']['items']:
-				newBeer = BeerTable()
-				newBeer.untappdId = entry['beer']['bid']
-				newBeer.name = entry['beer']['beer_name']
-				newBeer.style = entry['beer']['beer_style']
-				newBeer.imgUrl = entry['beer']['beer_label']
-				newBeer.abv = entry['beer']['beer_abv']
-				newBeer.breweryName = entry['brewery']['brewery_name']
-				newBeer.breweryId = entry['brewery']['brewery_id']
-				try:
-					dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)	
-				except ObjectDoesNotExist:
-					newBeer.save()
-				dbBeer = BeerTable.objects.get(untappdId=newBeer.untappdId)
-				newBeer.id = dbBeer.id
+			for entry in untappdResponse['response']['homebrew']['items']:
+				newBeer = JsonToBeer(entry)
 				beer_list.append(newBeer)
 				
 			context = Context({
@@ -141,13 +109,10 @@ def checkout_beer(request, bid):
 		untappdCheckout = request.POST.get("untappdCheckout", "")
 		if(untappdCheckout):
 			member = MemberTable.objects.get(user=request.user)
-			params = urllib.urlencode({'gmt_offset': -8, 'timezone': 'PST', 'bid': bid})
-			url = "http://api.untappd.com/v4/checkin/add?access_token="+member.untappdAuth
-			response = urllib2.urlopen(url, params).read()
-			jsonResponse = json.loads(response)
+			untappdResponse = untappdCheckout(member.untappdAuth, bid)
 			
-			if jsonResponse['meta']['code'] == 500:
-				failure = json.dumps(jsonResponse, sort_keys=True, indent=4, separators=(',', ': '))
+			if untappdResponse['meta']['code'] == 500:
+				failure = json.dumps(untappdResponse, sort_keys=True, indent=4, separators=(',', ': '))
 				context = Context({
 					'user' : request.user,
 					'response' : failure,
@@ -169,7 +134,7 @@ def checkout_beer(request, bid):
 def account_info(request):
 	template = loader.get_template('beers/account_info.html')
 	context = Context({
-		'CLIENTID' : clientId,
+		'CLIENTID' : GetUntappdClientId(),
 		'REDIRECT_URL' : "http://www.beerstock.ca/beers/account_auth",
 		'user' : request.user,
 	})
@@ -177,16 +142,7 @@ def account_info(request):
 	
 def account_update(request):
 	code = request.GET.get('code')
-	params = urllib.urlencode({'client_id': clientId, 'client_secret': clientSecret, 'reponse_type': 'code', 'redirect_url' : "http://www.beerstock.ca/beers/account_auth", 'code': code}) 
-	conn = httplib.HTTPSConnection("untappd.com")
-	conn.request("GET", "/oauth/authorize/?"+params)
-	response = conn.getresponse() 
-	jsonResponse = json.loads(response.read())
-	conn.close()
-	if jsonResponse['meta']['http_code'] == 200:
-		token = jsonResponse['response']['access_token']
-	else:
-		token = "null"
+	token = UntappdGetAuthToken(code)
 	try:
 		member = MemberTable.objects.get(user=request.user)
 	except ObjectDoesNotExist:
