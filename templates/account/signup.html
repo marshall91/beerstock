@@ -1,0 +1,15 @@
+<head>
+<title>BeerStock - Account Info</title>
+</head>
+{% include "beers/toolbar.html" %}
+<body bgcolor="silver">
+    <h3 align="center">Sign Up for BeerStock</h3>
+    <form method="post" action="" align='center' style="padding-top: 10px">
+        {% csrf_token %}
+        <label for="id_username">Username:</label>{{ form.username }}<br>
+        <label for="id_email">Email address:</label>{{ form.email }}<br>
+        <label for="id_password">Password:</label>{{ form.password }}<br>
+        <input type="submit" value="Create new user account" />
+    </form>
+</body>
+{% include "beers/footer.html" %}

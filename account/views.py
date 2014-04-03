@@ -7,8 +7,10 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
 
 from beers.models import MemberTable
+from forms import UserForm
 from Untappd import *
 
 
@@ -35,3 +37,16 @@ def account_update(request):
         'user': request.user,
     })
     return render_to_response('beers/success.html', context)
+
+
+def signup(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            login(request, new_user)
+            return HttpResponseRedirect('/beers/stock_index')
+    else:
+        form = UserForm()
+
+    return render(request, 'account/signup.html', {'form': form})

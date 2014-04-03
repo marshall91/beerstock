@@ -63,7 +63,12 @@
 		<li><a href="/beers/history_index">History</a></li>
 		{% if user %}
 			{% if user.username == "" %}
-				<li><a href="/beers/login">Sign In</a></li>
+                <li><a href="#">Sign In/Sign Up</a>
+					<ul>
+                        <li><a href="/beers/login">Sign In</a></li>
+                        <li><a href="/account/signup">Sign Up</a></li>
+                    </ul>
+                </li>
 			{% else %}
 				<li><a href="#">{{ user.username }}</a>
 					<ul>
@@ -73,7 +78,12 @@
 				</li>
 			{% endif %}
 		{% else %}
-			<li><a href="/beers/login">Sign In</a></li>
+			<li><a href="#">Sign In/Sign Up</a>
+					<ul>
+                        <li><a href="/beers/login">Sign In</a></li>
+                        <li><a href="/account/signup">Sign Up</a></li>
+                    </ul>
+                </li>
 		{% endif %}	
 	</ul>
 </nav>
