@@ -109,7 +109,7 @@ def checkout_beer(request, bid):
 		untappdCheckout = request.POST.get("untappdCheckout", "")
 		if(untappdCheckout):
 			member = MemberTable.objects.get(user=request.user)
-			untappdResponse = untappdCheckout(member.untappdAuth, bid)
+			untappdResponse = UntappdCheckout(member.untappdAuth, bid)
 			
 			if untappdResponse['meta']['code'] == 500:
 				failure = json.dumps(untappdResponse, sort_keys=True, indent=4, separators=(',', ': '))
