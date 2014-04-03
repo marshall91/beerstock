@@ -14,13 +14,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         #'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':     'cdb_4c5bf54043', #'/var/www/html/beerstock/database.db',                      # Or path to database file if using sqlite3.
+        'NAME':     'cdb_4c5bf54043',  # '/var/www/html/beerstock/database.db',
+        #  Or path to database file if using sqlite3.
         #'NAME':     '/Users/mackenziemarshall/Projects/beerstock2.0/data.db',
         'USER': 'be10e6da6bf0bd',                      # Not used with sqlite3.
         'PASSWORD': 'cd0ae2e4',                  # Not used with sqlite3.
-        'HOST': 'us-cdbr-azure-west-b.cleardb.com',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'us-cdbr-azure-west-b.cleardb.com',  # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -81,7 +82,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -91,7 +92,7 @@ SECRET_KEY = '=$i1la-&amp;b0xhpx^o)b5viu694r*sl^^z34gtv0(xpgo7hc5c9m'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
