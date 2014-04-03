@@ -14,10 +14,6 @@ from Untappd import *
 import json
 
 
-def logged_out(request):
-    return render_to_response('beers/logout_success.html')
-
-
 @login_required
 def search_beer(request):
     if request.method == "POST":

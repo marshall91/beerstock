@@ -65,7 +65,7 @@
 			{% if user.username == "" %}
                 <li><a href="#">Sign In/Sign Up</a>
 					<ul>
-                        <li><a href="/beers/login">Sign In</a></li>
+                        <li><a href="/account/login">Sign In</a></li>
                         <li><a href="/account/signup">Sign Up</a></li>
                     </ul>
                 </li>
@@ -73,14 +73,14 @@
 				<li><a href="#">{{ user.username }}</a>
 					<ul>
 						<li><a href="/account/account_info">Account Info</a></li>
-						<li><a href="/beers/logout">Logout</a></li>
+						<li><a href="/account/logout">Logout</a></li>
 					</ul>
 				</li>
 			{% endif %}
 		{% else %}
 			<li><a href="#">Sign In/Sign Up</a>
 					<ul>
-                        <li><a href="/beers/login">Sign In</a></li>
+                        <li><a href="/account/login">Sign In</a></li>
                         <li><a href="/account/signup">Sign Up</a></li>
                     </ul>
                 </li>

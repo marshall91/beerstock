@@ -167,6 +167,6 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = '/beers/stock_index'
 
-LOGIN_URL = '/beers/login'
+LOGIN_URL = '/account/login'
 
-LOGOUT_URL = '/beers/logout'
+LOGOUT_URL = '/account/logout'

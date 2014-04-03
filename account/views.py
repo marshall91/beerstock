@@ -49,3 +49,7 @@ def signup(request):
         form = UserForm()
 
     return render(request, 'account/signup.html', {'form': form})
+
+
+def logged_out(request):
+    return render_to_response('account/logout_success.html')
