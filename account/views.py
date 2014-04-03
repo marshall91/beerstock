@@ -44,6 +44,9 @@ def signup(request):
         form = UserForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
+            new_user = authenticate(username=request.POST['username'],
+                                    password=request.POST['password'])
+            login(request, new_user)
             return HttpResponseRedirect('/beers/stock_index')
     else:
         form = UserForm()
