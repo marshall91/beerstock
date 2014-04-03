@@ -133,28 +133,3 @@ def checkout_beer(request, bid):
             'user': request.user,
         })
         return render_to_response('beers/untappd_beer_checkout.html', context, RequestContext(request))
-
-
-def account_info(request):
-    template = loader.get_template('beers/account_info.html')
-    context = Context({
-        'CLIENTID': GetUntappdClientId(),
-        'REDIRECT_URL': "http://www.beerstock.ca/beers/account_auth",
-        'user': request.user,
-    })
-    return HttpResponse(template.render(context))
-
-
-def account_update(request):
-    code = request.GET.get('code')
-    token = UntappdGetAuthToken(code)
-    try:
-        member = MemberTable.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        member = MemberTable(user=request.user)
-    member.untappdAuth = token
-    member.save()
-    context = Context({
-        'user': request.user,
-    })
-    return render_to_response('beers/success.html', context)
