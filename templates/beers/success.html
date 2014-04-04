@@ -5,5 +5,11 @@
 
 <body bgcolor="silver">
 	<p align="center">Success!</p>
+    <p align="center">You've had {{ name }} {{ amount }} times!</p>
+    {% if left > 0 %}
+        <p align="center">You've got {{ left }} in your fridge.</p>
+    {% else %}
+        <p align="center">You've got none left in your fridge.</p>
+    {% endif %}
 </body>
 {% include "beers/footer.html" %}

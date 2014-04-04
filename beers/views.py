@@ -57,10 +57,7 @@ def update_beer(request, bid):
         stock.amountDrank = new_history
         stock.amountInStock = new_stock
         stock.save()
-        context = Context({
-            'user': request.user,
-        })
-        return render_to_response('beers/success.html', context)
+        return HttpResponseRedirect('/beers/stock_index')
     else:
         beer = BeerTable.objects.get(untappdId=bid)
         try:
@@ -119,6 +116,9 @@ def checkout_beer(request, bid):
                 })
                 return render_to_response('beers/failed.html', context)
         context = Context({
+            'name': beer.name,
+            'amount': stock.amountDrank,
+            'left': stock.amountInStock,
             'user': request.user,
         })
         return render_to_response('beers/success.html', context)
