@@ -1,0 +1,92 @@
+<head>
+	<style type="text/css" title="currentStyle">
+		@import "/static/css/jquery.dataTables.css";
+	</style>
+	<script type="text/javascript" language="javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="/static/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" language="javascript" src="/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$('#histTable').dataTable({
+				"aaSorting": [[ 1, "desc" ]],
+			});
+		});
+		$(document).ready(function() {
+			$('#table').dataTable();
+		});
+	</script>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/navbar.css" rel="stylesheet">
+    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
+	<style>
+		footer
+		{
+			position:absolute;
+			bottom:10;
+			width:95%;
+		}
+	</style>	
+	<link rel="shortcut icon" href="http://www.beerstock.ca/static/images/beer_favicon.ico" >
+	<link rel="icon" href="http://www.beerstock.ca/static/images/beer_favicon.ico" >
+</head>
+
+<body>
+<div class="container">
+    <!-- Static navbar -->
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+        <a class="navbar-brand" href="#">Beerstock</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/beers/search_beer">Search</a></li>
+                <li><a href="/beers/stock_index">Stock</a></li>
+                <li><a href="/beers/history_index">History</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    {% if user %}
+                        {% if user.username == "" %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In/Sign Up <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/account/login">Sign In</a></li>
+                                <li><a href="/account/signup">Sign Up</a></li>
+                            </ul>
+                        {% else %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/account/account_info">Account Info</a></li>
+						        <li><a href="/account/logout">Logout</a></li>
+                            </ul>
+                        {% endif %}
+		            {% else %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In/Sign Up <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/account/login">Sign In</a></li>
+                                <li><a href="/account/signup">Sign Up</a></li>
+                            </ul>
+                    {% endif %}
+                </li>
+            </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </div>
+</div>
+
+<div id="footer">
+  <div class="container">
+    <p align="right">Copyright Mackenzie Marshall 2014</p>
+    <a href="http://untappd.com/"><img src="/static/images/poweredbyuntappd_b_white_small.png" align="right" ></a>
+  </div>
+</div>
+</body>
