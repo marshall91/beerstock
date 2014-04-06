@@ -1,6 +1,7 @@
 from beers.models import BeerTable
 from django.conf import settings
 import httplib, urllib, urllib2, json
+from django.core.exceptions import ObjectDoesNotExist
 
 UNTAPPD_CLIENT_ID = "CF9D45955B760732A44FE2E836228BF53AC26763"
 UNTAPPD_CLIENT_SECRET = "805F76302BD227868AF94F897EE041E82E4DE611"
@@ -57,10 +58,10 @@ def JsonToBeer(entry):
     new_beer.breweryName = entry['brewery']['brewery_name']
     new_beer.breweryId = entry['brewery']['brewery_id']
     try:
-        db_beer = BeerTable.objects.get(untappdId=newBeer.untappdId)
+        db_beer = BeerTable.objects.get(untappdId=new_beer.untappdId)
     except ObjectDoesNotExist:
         new_beer.save()
-    db_beer = BeerTable.objects.get(untappdId=newBeer.untappdId)
+    db_beer = BeerTable.objects.get(untappdId=new_beer.untappdId)
     new_beer.id = db_beer.id
 
     return new_beer
