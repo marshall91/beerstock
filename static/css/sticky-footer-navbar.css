@@ -12,7 +12,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 80px;
-  background-color: #424242;
+  background-color: #000000;
 }
 #footer p{
     color: #ffffff;
