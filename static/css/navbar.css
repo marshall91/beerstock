@@ -1,7 +1,10 @@
-.navbar-static-top {
+.navbar-fixed-top {
   margin-bottom: 19px;
 }
-
+.navbar-inner{
+  max-width: 1048px;
+  margin: 0 auto;
+}
 body {
-  padding-top: 70px;
+  padding-top: 50px;
 }
