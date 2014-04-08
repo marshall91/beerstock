@@ -3,32 +3,25 @@
 </head>
 {% include "layouts/toolbar.html" %}
 
-<body >
-	<form method="post">
+<div class="search-results">
+    <form method="post">
 		{% csrf_token %}
 		<p align="center"><input type="text" name="beername"></p>
 		<p align="center"><input type="submit" value="Add beer!"></p>
 	</form>
 	{% if beer_list %}
-		<table border="1" align="center" id='table'>
-			<thead>
-				<td></td>
-				<td><b>Name</b></td>
-				<td><b>Style</b></td>
-				<td><b>Abv</b></td>
-				<td><b>Brewery</b></td>
-			</thead>
 		{% for beer in beer_list %}
-			<tr>
-				<td><img src={{ beer.imgUrl }} height=90px width=90px></td>
-				<td><a href="/beers/update_beer/{{ beer.untappdId }}">{{ beer.name }}</a></td>
-				<td>{{ beer.style }}</td>
-				<td>{{ beer.abv }}</td>
-				<td>{{ beer.breweryName }}</td>
-			</tr>
+            <div class="beer-{{ beer.untappdId }} beer-result">
+                <img src={{ beer.imgUrl }} height=90px width=90px>
+                <p>
+                    <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
+                    {{ beer.breweryName }}<br>
+                    {{ beer.style }} - {{ beer.abv }}% ABV
+                </p>
+            </div>
 		{% endfor %}
 		</table>
 	{% else %}
 		<p>No results available.</p>
 	{% endif %}
-</body>
+</div>
