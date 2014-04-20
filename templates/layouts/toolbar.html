@@ -20,7 +20,6 @@
 
     <!-- Custom styles for this template -->
     <link href="/static/css/navbar.css" rel="stylesheet">
-    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
     <link href="/static/css/search.css" rel="stylesheet">
 	<link rel="shortcut icon" href="http://www.beerstock.ca/static/images/beer_favicon.ico" >
 	<link rel="icon" href="http://www.beerstock.ca/static/images/beer_favicon.ico" >
@@ -76,17 +75,31 @@
                 </div>
             </div><!--/.container-fluid -->
         </div>
-    </div>
-
-    <div class="footer">
-        <div class="footer-inner">
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Blog</a></li>
-                <li>© Mackenzie Marshall 2014</li>
-                <li><a href="http://untappd.com/"><img src="/static/images/poweredbyuntappd_b_white_small.png" align="right" ></a></li>
-            </ul>
+        <!-- Static navbar -->
+        <div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="http://untappd.com/"><img src="/static/images/poweredbyuntappd_b_white_small.png" height="70%"></a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="http://mackenziemarshall.com">© Mackenzie Marshall 2014</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div><!--/.container-fluid -->
         </div>
     </div>
 </nav>
