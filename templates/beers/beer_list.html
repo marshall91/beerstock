@@ -2,26 +2,38 @@
 <title>BeerStock - Beer Search Results</title>
 </head>
 {% include "layouts/toolbar.html" %}
-
-<div class="search-results">
-    <form method="post">
-		{% csrf_token %}
-		<p align="center"><input type="text" name="beername"></p>
-		<p align="center"><input type="submit" value="Add beer!"></p>
-	</form>
-	{% if beer_list %}
-		{% for beer in beer_list %}
-            <div class="beer-{{ beer.untappdId }} beer-result">
-                <img src={{ beer.imgUrl }} height=90px width=90px>
-                <p>
-                    <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
-                    {{ beer.breweryName }}<br>
-                    {{ beer.style }} - {{ beer.abv }}% ABV
-                </p>
-            </div>
-		{% endfor %}
-		</table>
-	{% else %}
-		<p>No results available.</p>
-	{% endif %}
-</div>
+<body>
+    <div class="containter">
+        <div class="row">
+            {% if beer_list %}
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p align="center"><input type="text" name="beername"></p>
+                        <p align="center"><input type="submit" value="Add beer!"></p>
+                    </form>
+                {% for beer in beer_list %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src={{ beer.imgUrl }} height=90px width=90px>
+                        </div>
+                        <div class="col-md-8">
+                            <p>
+                                <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
+                                {{ beer.breweryName }}<br>
+                                {{ beer.style }} - {{ beer.abv }}% ABV
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    <p>Account info will go here</p>
+                </div>
+            {% else %}
+                <p>No results available.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
