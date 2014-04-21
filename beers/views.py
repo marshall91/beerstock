@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
 
 from beers.models import BeerTable, StockTable, HistoryTable, MemberTable
 from Untappd import *
@@ -35,11 +36,9 @@ def search_beer(request):
                 'beer_list': beer_list,
                 'user': request.user,
             })
-            return render_to_response('beers/beer_list.html', context, RequestContext(request))
+            return render(request, 'beers/beer_list.html', context)
     else:
-        context = Context({
-        })
-        return render_to_response('beers/untappd_beer_form.html', context, RequestContext(request))
+        return render(request, 'beers/untappd_beer_form.html')
 
 
 @login_required
@@ -57,7 +56,7 @@ def update_beer(request, bid):
         stock.amountDrank = new_history
         stock.amountInStock = new_stock
         stock.save()
-        return HttpResponseRedirect('/beers/stock_index')
+        return render(request, 'beers/untappd_beer_update.html')
     else:
         beer = BeerTable.objects.get(untappdId=bid)
         try:
@@ -69,29 +68,27 @@ def update_beer(request, bid):
             'stock': stock,
             'user': request.user,
         })
-        return render_to_response('beers/untappd_beer_update.html', context, RequestContext(request))
+        return render(request, 'beers/untappd_beer_update.html', context)
 
 
 @login_required
 def stock_index(request):
     all_beer_list = StockTable.objects.filter(owner=request.user, amountInStock__gt=0)
-    template = loader.get_template('beers/stock_index.html')
     context = Context({
         'all_beer_list': all_beer_list,
         'user': request.user,
     })
-    return HttpResponse(template.render(context))
+    return render(request, 'beers/stock_index.html', context)
 
 
 @login_required
 def history_index(request):
     all_beer_list = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')
-    template = loader.get_template('beers/history_index.html')
     context = Context({
         'all_beer_list': all_beer_list,
         'user': request.user,
     })
-    return HttpResponse(template.render(context))
+    return render(request, 'beers/history_index.html', context)
 
 
 @login_required
@@ -109,23 +106,23 @@ def checkout_beer(request, bid):
             member = MemberTable.objects.get(user=request.user)
             untappd_response = UntappdCheckout(member.untappdAuth, bid)
             if untappd_response['meta']['code'] == 500:
-                failure = json.dumps(untappdResponse, sort_keys=True, indent=4, separators=(',', ': '))
+                failure = json.dumps(untappd_response, sort_keys=True, indent=4, separators=(',', ': '))
                 context = Context({
                     'user': request.user,
                     'response': failure,
                 })
-                return render_to_response('beers/failed.html', context)
+                return render(request, 'beers/failed.html', context)
         context = Context({
             'name': beer.name,
             'amount': stock.amountDrank,
             'left': stock.amountInStock,
             'user': request.user,
         })
-        return render_to_response('beers/success.html', context)
+        return render(request, 'beers/success.html', context)
     else:
         context = Context({
             'beer': beer,
             'stock': stock,
             'user': request.user,
         })
-        return render_to_response('beers/untappd_beer_checkout.html', context, RequestContext(request))
+        return render(request, 'beers/untappd_beer_checkout.html', context)

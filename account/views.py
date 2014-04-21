@@ -15,13 +15,12 @@ from Untappd import *
 
 
 def account_info(request):
-    template = loader.get_template('account/account_info.html')
     context = Context({
         'CLIENTID': GetUntappdClientId(),
         'REDIRECT_URL': "http://www.beerstock.ca/account/account_auth",
         'user': request.user,
     })
-    return HttpResponse(template.render(context))
+    return render(request, 'account/account_info.html', context)
 
 
 def account_update(request):
@@ -36,7 +35,7 @@ def account_update(request):
     context = Context({
         'user': request.user,
     })
-    return render_to_response('beers/success.html', context)
+    return render(request, 'beers/success.html', context)
 
 
 def signup(request):
@@ -55,4 +54,4 @@ def signup(request):
 
 
 def logged_out(request):
-    return render_to_response('account/logout_success.html')
+    return render(request, 'account/logout_success.html')

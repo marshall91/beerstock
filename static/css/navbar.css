@@ -5,6 +5,9 @@
   max-width: 1048px;
   margin: 0 auto;
 }
+.search-beer {
+    padding-top: 10px;
+}
 body {
   padding-top: 60px;
   padding-bottom: 60px;

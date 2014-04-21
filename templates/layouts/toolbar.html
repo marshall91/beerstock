@@ -41,7 +41,13 @@
                      </div>
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="/beers/search_beer">Search</a></li>
+                            <li><a href="#">Search</a></li>
+                            <li>
+                                <form method="post" action="/beers/search_beer/" class="search-beer">
+                                    {% csrf_token %}
+                                    <input type="text" name="beername">
+                                </form>
+                            </li>
                             <li><a href="/beers/stock_index">Stock</a></li>
                             <li><a href="/beers/history_index">History</a></li>
                         </ul>
