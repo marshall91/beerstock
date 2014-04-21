@@ -38,7 +38,7 @@ def search_beer(request):
             })
             return render(request, 'beers/beer_list.html', context)
     else:
-        return render(request, 'beers/untappd_beer_form.html')
+        return render(request, 'beers/stock_index.html')
 
 
 @login_required
