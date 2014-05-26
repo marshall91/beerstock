@@ -56,7 +56,7 @@ def update_beer(request, bid):
         stock.amountDrank = new_history
         stock.amountInStock = new_stock
         stock.save()
-        return render(request, 'beers/untappd_beer_update.html')
+        return render(request, 'beers/stock_index.html')
     else:
         beer = BeerTable.objects.get(untappdId=bid)
         try:
@@ -102,9 +102,10 @@ def checkout_beer(request, bid):
         history = HistoryTable(owner=request.user, untappdId=beer.untappdId, beerName=beer.name)
         history.save()
         untappd_checkout = request.POST.get("untappdCheckout", "")
+        untappd_rating = request.POST.get("untappdRating", "")
         if untappd_checkout:
             member = MemberTable.objects.get(user=request.user)
-            untappd_response = UntappdCheckout(member.untappdAuth, bid)
+            untappd_response = UntappdCheckout(member.untappdAuth, bid, untappd_rating)
             if untappd_response['meta']['code'] == 500:
                 failure = json.dumps(untappd_response, sort_keys=True, indent=4, separators=(',', ': '))
                 context = Context({

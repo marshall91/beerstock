@@ -18,8 +18,8 @@ def UntappdSearch(query):
     return json_response
 
 
-def UntappdCheckout(auth, bid):
-    params = urllib.urlencode({'gmt_offset': -8, 'timezone': 'PST', 'bid': bid})
+def UntappdCheckout(auth, bid, rating):
+    params = urllib.urlencode({'gmt_offset': -8, 'timezone': 'PST', 'bid': bid, 'rating': rating})
     url = "http://api.untappd.com/v4/checkin/add?access_token="+auth
     response = urllib2.urlopen(url, params).read()
     json_response = json.loads(response)
