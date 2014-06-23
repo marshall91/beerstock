@@ -34,6 +34,7 @@ class HistoryTable(models.Model):
 
 class MemberTable(models.Model):
     user = models.ForeignKey(User)
-    untappdAuth = models.CharField(max_length=1000)
+    untappdAuth = models.CharField(max_length=1000, defaul=None)
+    mobileAppAuth = models.CharField(max_length=1000, default=None)
     gmtOffset = models.IntegerField(default=-8)
     timezone = models.CharField(max_length=10, default='PST')
