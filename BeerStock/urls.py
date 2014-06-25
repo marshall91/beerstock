@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^beers/', include('beers.urls')),
     url(r'^account/', include('account.urls')),
+    url(r'^api.', include('api.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', RedirectView.as_view(url='/beers/stock_index')), 
 )
