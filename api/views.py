@@ -79,7 +79,7 @@ def get_stock(request):
         count = 0
         response_data['beers'] = {}
         for beer in beer_list:
-            response_data['beers'][count] = serialize_beer(beer)
+            response_data['beers'][count] = serialize_stock(beer)
             count += 1
         response_data['result'] = 'success'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
