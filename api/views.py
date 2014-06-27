@@ -98,8 +98,6 @@ def get_beer_stock(request, bid):
         compareToken = MemberTable.objects.get(user=owner).mobileAppAuth
     except ObjectDoesNotExist:
         compareToken = None
-    print compareToken
-    print token
     if token == compareToken:
         stock = StockTable.objects.get(owner=owner, untappdId=bid)
         response_data['stock'] = serialize_stock(stock)
@@ -116,3 +114,45 @@ def get_beer(request, bid):
     beer = BeerTable.objects.get(untappdId=bid)
     serialized_beer = serializers.serialize('json', [ beer, ])
     return HttpResponse(serialized_beer, content_type="application/json")
+
+
+@csrf_exempt
+def checkout_beer(request):
+    response_data = {}
+    if request.method == 'POST':
+        bid = request.POST['bid']
+        user = request.POST['user']
+        untappdCheckout = request.POST['untappdCheckout']
+        rating = request.POST['rating']
+        token = request.POST['token']
+        try:
+            compareToken = MemberTable.objects.get(user=user).mobileAppAuth
+        except ObjectDoesNotExist:
+            compareToken = None
+        if token == compareToken:
+            member = MemberTable.objects.get(user=user)
+            if untappdCheckout:
+                untappd_response = UntappdCheckout(member.untappdAuth, bid, rating)
+                if untappd_response['meta']['code'] == 500:
+                    response_data['result'] = 'failed'
+                    response_data['message'] = 'Failed to checkout on Untappd'
+                    return HttpResponse(json.dumps(response_data), content_type="application/json")
+            beer = BeerTable.objects.get(untappdId=bid)
+            stock = StockTable.objects.get(untappdId=bid, owner=user)
+            stock.amountDrank += 1
+            stock.amountInStock += 1
+            stock.save()
+            userObject = User.objects.get(id=user)
+            history = HistoryTable(owner=userObject, untappdId=bid, beerName=beer.name)
+            history.save()
+            response_data['message'] = "You checked out a beer"
+            response_data['result'] = 'success'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            response_data['result'] = 'failed'
+            response_data['message'] = 'Failed token authentication'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        response_data['result'] = 'failed'
+        response_data['message'] = 'Checkouts must be done with POST requests'
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
