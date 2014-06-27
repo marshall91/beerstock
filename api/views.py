@@ -140,7 +140,7 @@ def checkout_beer(request):
             beer = BeerTable.objects.get(untappdId=bid)
             stock = StockTable.objects.get(untappdId=bid, owner=user)
             stock.amountDrank += 1
-            stock.amountInStock += 1
+            stock.amountInStock -= 1
             stock.save()
             userObject = User.objects.get(id=user)
             history = HistoryTable(owner=userObject, untappdId=bid, beerName=beer.name)
