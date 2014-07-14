@@ -73,7 +73,12 @@ def update_beer(request, bid):
 
 @login_required
 def stock_index(request):
-    all_beer_list = StockTable.objects.filter(owner=request.user, amountInStock__gt=0)
+    user_stock_list = StockTable.objects.filter(owner=request.user, amountInStock__gt=0)
+    all_beer_list = {}
+    for stock in user_stock_list:
+        beer = BeerTable.objects.get(untappdId=stock.untappdId)
+        all_beer_list[stock.untappdId] = {'stock': stock, 'beer': beer}
+
     context = Context({
         'all_beer_list': all_beer_list,
         'user': request.user,
