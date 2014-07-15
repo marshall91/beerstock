@@ -88,9 +88,16 @@ def stock_index(request):
 
 @login_required
 def history_index(request):
-    all_beer_list = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')
+    user_history = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')
+    all_data_list = {}
+    count = 0
+    for history in user_history:
+        beer = BeerTable.objects.get(untappdId=history.untappdId)
+        all_data_list[count] = {'history': history, 'beer': beer}
+        count += 1
+
     context = Context({
-        'all_beer_list': all_beer_list,
+        'all_data_list': all_data_list,
         'user': request.user,
     })
     return render(request, 'beers/history_index.html', context)

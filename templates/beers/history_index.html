@@ -4,20 +4,28 @@
 {% include "layouts/toolbar.html" %}
 
 <body >
-{% if all_beer_list %}
-	<table border="1" align="center" id='histTable'>
-		<thead>
-			<td><b>Name</b></td>
-			<td><b>Date</b></td>
-		</thead>
-	{% for beer in all_beer_list %}
-		<tr>
-			<td><a href="/beers/update_beer/{{ beer.untappdId }}/">{{ beer.beerName }}</a></td>
-			<td>{{ beer.timestamp | date:"Y/m/d - G:i" }}
-		</tr>
-	{% endfor %}
-	</table>
-{% else %}
-	<p align="center">No beers are available.</p>
-{% endif %}
+    <div class="container">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            {% if all_data_list %}
+                {% for key, entry in all_data_list.items %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src={{ entry.beer.imgUrl }} height=90px width=90px class="beer-logo">
+                        </div>
+                        <div class="col-md-8">
+                            <p>
+                                <a href="/beers/update_beer/{{ entry.beer.untappdId }}"><strong>{{ entry.beer.name }}</strong></a><br>
+                                {{ entry.beer.breweryName }}<br>
+                                {{ entry.beer.style }} - {{ entry.beer.abv }}% ABV<br>
+                                {{ entry.history.timestamp | date:"Y/m/d - G:i" }}
+                            </p>
+                        </div>
+                    </div>
+	            {% endfor %}
+            {% else %}
+	            <p align="center">No beers are available.</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
