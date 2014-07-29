@@ -8,11 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
+from django.conf import settings
 
-from beers.models import BeerTable, StockTable, HistoryTable, MemberTable
-from Untappd import *
+from beers.models import BeerTable, StockTable, HistoryTable, MemberTable, JsonToBeer
 
 import json
+import pythonUntappd
 
 
 @login_required
@@ -20,7 +21,8 @@ def search_beer(request):
     if request.method == "POST":
         beer = request.POST.get("beername", "")
 
-        untappd_response = UntappdSearch(beer)
+        api = pythonUntappd.api(settings.UNTAPPD_CLIENT_ID, settings.UNTAPPD_CLIENT_SECRET)
+        untappd_response = api.beer_search(beer)
 
         if untappd_response['meta']['code'] == 200:
             beer_list = []
@@ -117,7 +119,12 @@ def checkout_beer(request, bid):
         untappd_rating = request.POST.get("untappdRating", "")
         if untappd_checkout:
             member = MemberTable.objects.get(user=request.user)
-            untappd_response = UntappdCheckout(member.untappdAuth, bid, untappd_rating)
+
+            api = pythonUntappd.api(settings.UNTAPPD_CLIENT_ID, settings.UNTAPPD_CLIENT_SECRET)
+            api.set_auth(member.untappdAuth)
+
+            untappd_response = api.checkin('-8', 'PST', bid, rating=untappd_rating)
+
             if untappd_response['meta']['code'] == 500:
                 failure = json.dumps(untappd_response, sort_keys=True, indent=4, separators=(',', ': '))
                 context = Context({

@@ -8,15 +8,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
+from django.conf import settings
 
 from beers.models import MemberTable
 from forms import UserForm
-from Untappd import *
+from Untappd import UntappdGetAuthToken
 
 
 def account_info(request):
     context = Context({
-        'CLIENTID': GetUntappdClientId(),
+        'CLIENTID': settings.UNTAPPD_CLIENT_ID,
         'REDIRECT_URL': "http://www.beerstock.ca/account/account_auth",
         'user': request.user,
     })
@@ -27,9 +28,9 @@ def account_update(request):
     code = request.GET.get('code')
     token = UntappdGetAuthToken(code)
     try:
-        member = MemberTable.objects.get(user=request.user)
+        member = MemberTable.objects.get(user=request.user.id)
     except ObjectDoesNotExist:
-        member = MemberTable(user=request.user)
+        member = MemberTable(user=request.user.id)
     member.untappdAuth = token
     member.save()
     context = Context({
