@@ -14,25 +14,22 @@ body {
 }
 
 .beer_box {
-
-    border-left-style: groove;
-    border-top-style: groove;
-    border-right-style: ridge;
-    border-bottom-style: ridge;
-    border-width: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
     margin-bottom: 20px;
-    border-color: #929D9D;
-    border-radius: 15px;
-    background: #D1E0E0;
+    border-color: darkgray;
+    border-bottom-style: solid;
+    border-width: 1px;
+    height: 120px;
 }
 
 .beer_box .beer_logo {
     display: block;
-    margin: 15px auto;
+    margin: 5px auto;
     border-style: solid;
-    border-width: 5px;
+    border-width: 2px;
     border-color: #808080;
     border-radius: 15px;
+}
+
+.beer_box .text_box {
+    margin-top: 5px;
 }
