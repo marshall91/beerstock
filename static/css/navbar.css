@@ -1,18 +1,38 @@
 .navbar-fixed-top {
-  margin-bottom: 19px;
+    margin-bottom: 19px;
 }
 .navbar-inner{
-  max-width: 1048px;
-  margin: 0 auto;
+    max-width: 1048px;
+    margin: 0 auto;
 }
 .search-beer {
     padding-top: 10px;
 }
 body {
-  padding-top: 60px;
-  padding-bottom: 60px;
+    padding-top: 60px;
+    padding-bottom: 60px;
 }
 
-.beer-logo {
-    float: right;
+.beer_box {
+
+    border-left-style: groove;
+    border-top-style: groove;
+    border-right-style: ridge;
+    border-bottom-style: ridge;
+    border-width: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    border-color: #929D9D;
+    border-radius: 15px;
+    background: #D1E0E0;
+}
+
+.beer_box .beer_logo {
+    display: block;
+    margin: 15px auto;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #808080;
+    border-radius: 15px;
 }
