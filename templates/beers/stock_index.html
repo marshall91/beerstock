@@ -8,20 +8,7 @@
         <div class="col-md-6">
             {% if all_beer_list %}
                 {% for key, entry in all_beer_list.items %}
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src={{ entry.beer.imgUrl }} height=90px width=90px class="beer-logo">
-                        </div>
-                        <div class="col-md-8">
-                            <p>
-                                <a href="/beers/update_beer/{{ entry.beer.untappdId }}"><strong>{{ entry.beer.name }}</strong></a><br>
-                                {{ entry.beer.breweryName }}<br>
-                                {{ entry.beer.style }} - {{ entry.beer.abv }}% ABV<br>
-                                {{ entry.stock.amountInStock }} in fridge<br>
-                                <a href="/beers/checkout_beer/{{ entry.stock.untappdId }}">Checkout beer!</a>
-                            </p>
-                        </div>
-                    </div>
+                    {% include "beers/beer_details.html" with beer=entry.beer stock=entry.stock %}
 	            {% endfor %}
             {% else %}
                 <p align="center">No beers are available.</p>

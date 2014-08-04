@@ -1,0 +1,18 @@
+<div class="row beer_box">
+    <div class="col-md-4">
+        <img src={{ beer.imgUrl }} height=90px width=90px class="beer-logo">
+    </div>
+    <div class="col-md-8">
+        <p>
+            <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
+            {{ beer.breweryName }}<br>
+            {{ beer.style }} - {{ beer.abv }}% ABV
+            {% if stock %}
+                <br>{{ stock.amountInStock }} in fridge<br>
+                <a href="/beers/checkout_beer/{{ stock.untappdId }}">Checkout beer!</a>
+            {% elif history %}
+                <br>{{ history.timestamp | date:"Y/m/d - G:i" }}
+            {% endif %}
+        </p>
+    </div>
+</div>

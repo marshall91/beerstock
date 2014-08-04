@@ -9,18 +9,7 @@
         <div class="row">
             {% if beer_list %}
                 {% for beer in beer_list %}
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src={{ beer.imgUrl }} height=90px width=90px class="beer-logo">
-                        </div>
-                        <div class="col-md-8">
-                            <p>
-                                <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
-                                {{ beer.breweryName }}<br>
-                                {{ beer.style }} - {{ beer.abv }}% ABV
-                            </p>
-                        </div>
-                    </div>
+                    {% include "beers/beer_details.html" with beer=beer %}
                 {% endfor %}
             {% else %}
                     <p>No results available.</p>
