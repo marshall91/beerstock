@@ -58,7 +58,7 @@ def update_beer(request, bid):
         stock.amountDrank = new_history
         stock.amountInStock = new_stock
         stock.save()
-        return render(request, 'beers/stock_index.html')
+        return HttpResponseRedirect('/beers/stock_index')
     else:
         beer = BeerTable.objects.get(untappdId=bid)
         try:
