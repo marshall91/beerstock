@@ -90,7 +90,7 @@ def stock_index(request):
 
 @login_required
 def history_index(request):
-    user_history = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')
+    user_history = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')[:10]
     all_data_list = {}
     count = 0
     for history in user_history:
