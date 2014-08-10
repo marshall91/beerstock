@@ -27,10 +27,11 @@ def account_info(request):
 def account_update(request):
     code = request.GET.get('code')
     token = UntappdGetAuthToken(code)
+    user = User.objects.get(id=request.user.id)
     try:
-        member = MemberTable.objects.get(user=request.user.id)
+        member = MemberTable.objects.get(user=user)
     except ObjectDoesNotExist:
-        member = MemberTable(user=request.user.id)
+        member = MemberTable(user=user)
     member.untappdAuth = token
     member.save()
     context = Context({
