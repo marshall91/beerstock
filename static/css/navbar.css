@@ -33,3 +33,7 @@ body {
 .beer_box .text_box {
     margin-top: 5px;
 }
+
+.paginationButton {
+    margin: 0 auto;
+}

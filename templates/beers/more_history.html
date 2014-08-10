@@ -1,0 +1,7 @@
+{% if all_data_list %}
+    {% for key, entry in all_data_list.items %}
+        {% include "beers/beer_details.html" with beer=entry.beer history=entry.history %}
+    {% endfor %}
+{% else %}
+    <p align="center">No beers are available.</p>
+{% endif %}

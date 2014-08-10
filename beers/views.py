@@ -106,6 +106,25 @@ def history_index(request):
 
 
 @login_required
+def more_history(request, page):
+    max_return = int(page)+20
+    min_return = int(page)+10
+    user_history = HistoryTable.objects.filter(owner=request.user).order_by('-timestamp')[min_return:max_return]
+    all_data_list = {}
+    count = 0
+    for history in user_history:
+        beer = BeerTable.objects.get(untappdId=history.untappdId)
+        all_data_list[count] = {'history': history, 'beer': beer}
+        count += 1
+
+    context = Context({
+        'all_data_list': all_data_list,
+        'user': request.user,
+    })
+    return render(request, 'beers/more_history.html', context)
+
+
+@login_required
 def checkout_beer(request, bid):
     beer = BeerTable.objects.get(untappdId=bid)
     stock = StockTable.objects.get(untappdId=beer.untappdId, owner=request.user)

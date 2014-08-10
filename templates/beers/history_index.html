@@ -3,8 +3,8 @@
 </head>
 {% include "layouts/toolbar.html" %}
 
-<body >
-    <div class="container">
+<body>
+    <div class="container _beerHistory">
         <div class="col-md-2"></div>
         <div class="col-md-6">
             {% if all_data_list %}
@@ -14,6 +14,10 @@
             {% else %}
 	            <p align="center">No beers are available.</p>
             {% endif %}
+            <div class="paginationButton _moreHistory">
+                <button class="_moreHistoryButton" value="1">More History</button>
+            </div>
         </div>
+
     </div>
 </body>
