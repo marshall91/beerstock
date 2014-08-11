@@ -1,33 +1,59 @@
-<head>
-<title>BeerStock - Beer Update</title>
-</head>
-{% include "layouts/toolbar.html" %}
+<div class="modal fade _checkoutModal{{ beer.untappdId }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Checkout Beer</h4>
+      </div>
+      <div class="modal-body">
 
-<body >
-	{% if beer %}
-		<p align="center"><img src={{ beer.imgUrl }}></p>
-		<p align="center"><b>Name: </b>{{ beer.name }}</p>
-		<p align="center"><b>Brewery: </b>{{ beer.breweryName }}</p>
-		<p align="center"><b>Style: </b>{{ beer.style }}</p>
-		<p align="center"><b>ABV: </b>{{ beer.abv }}</p>
-		<p align="center"><b>History: </b>{{ stock.amountDrank }}</p>
-		<p align="center"><b>Stock: </b>{{ stock.amountInStock }}</p>
-		<form method="post">
-			{% csrf_token %}
-			<p align="center">
-				<input type="checkbox" name="untappdCheckout" value="untappdCheckout">Also checkout on Untappd<br>
-                Rating
-                <select name="untappdRating" value="untappdCheckout">
-                    <option value="0">No Rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select><br><br>
-				<input type="submit" value="Checkout Beer"></p>
-		</form>
-	{% else %}
-		<p align="center">No beer available.</p>
-	{% endif %}
-</body>
+        {% if beer %}
+            <form method="post" action="/beers/checkout_beer/{{ beer.untappdId }}/">
+                {% csrf_token %}
+                <div class="row text-center">
+                    <img src={{ beer.imgUrl }}>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-right">
+                        <b>Name: </b><br>
+                        <b>Brewery: </b><br>
+                        <b>Style: </b><br>
+                        <b>ABV: </b><br>
+                        <b>History: </b><br>
+                        <b>Stock: </b>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        {{ beer.name }}<br>
+                        {{ beer.breweryName }}<br>
+                        {{ beer.style }}<br>
+                        {{ beer.abv }}<br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <br><input type="checkbox" name="untappdCheckout" value="untappdCheckout"> Also checkout on Untappd<br>
+                        Rating
+                        <select name="untappdRating" value="untappdCheckout">
+                            <option value="0">No Rating</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select><br><br>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            No beer available.
+        {% endif %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success _checkoutSubmit{{ beer.untappdId }}" data-dismiss="modal">Checkout Beer</button>
+      </div>
+    </div>
+  </div>
+</div>

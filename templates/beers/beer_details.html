@@ -7,13 +7,16 @@
             <strong>{{ beer.name }}</strong><br>
             {{ beer.breweryName }}<br>
             {{ beer.style }} - {{ beer.abv }}% ABV
-            <button type="button" class="btn btn-default _updateButton" value="{{ beer.untappdId}}">Update Current Stock</button>
             {% if stock %}
                 <br>{{ stock.amountInStock }} in fridge<br>
-                <a href="/beers/checkout_beer/{{ stock.untappdId }}">Checkout beer!</a>
+                <button type="button" class="btn btn-default _updateButton" value="{{ beer.untappdId}}">Update Current Stock</button>
+                <button type="button" class="btn btn-default _checkoutButton" value="{{ beer.untappdId}}">Checkout Beer</button>
             {% elif history %}
                 <br>{{ history.timestamp | date:"Y/m/d - G:i" }}
+            {% else %}
+                <button type="button" class="btn btn-default _updateButton" value="{{ beer.untappdId}}">Update Current Stock</button>
             {% endif %}
+
         </p>
     </div>
 </div>
