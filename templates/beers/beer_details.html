@@ -1,12 +1,13 @@
-<div class="row beer_box">
+<div class="row beer_box _beer_box{{ beer.untappdId }}">
     <div class="col-md-4 logo_box">
         <img src={{ beer.imgUrl }} height=90px width=90px class="beer_logo">
     </div>
     <div class="col-md-8 text_box">
         <p>
-            <a href="/beers/update_beer/{{ beer.untappdId }}"><strong>{{ beer.name }}</strong></a><br>
+            <strong>{{ beer.name }}</strong><br>
             {{ beer.breweryName }}<br>
             {{ beer.style }} - {{ beer.abv }}% ABV
+            <button type="button" class="btn btn-default _updateButton" value="{{ beer.untappdId}}">Update Current Stock</button>
             {% if stock %}
                 <br>{{ stock.amountInStock }} in fridge<br>
                 <a href="/beers/checkout_beer/{{ stock.untappdId }}">Checkout beer!</a>

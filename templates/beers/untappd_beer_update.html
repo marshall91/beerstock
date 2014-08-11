@@ -1,22 +1,46 @@
-<head>
-<title>BeerStock - Beer Update</title>
-</head>
-{% include "layouts/toolbar.html" %}
+<div class="modal fade _updateModal{{ beer.untappdId }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Update Beer</h4>
+      </div>
+      <div class="modal-body">
 
-<body >
-	{% if beer %}
-		<p align="center"><img src={{ beer.imgUrl }}></p>
-		<p align="center"><b>Name: </b>{{ beer.name }}</p>
-		<p align="center"><b>Brewery: </b>{{ beer.breweryName }}</p>
-		<p align="center"><b>Style: </b>{{ beer.style }}</p>
-		<p align="center"><b>ABV: </b>{{ beer.abv }}</p>
-		<form method="post">
-			{% csrf_token %}
-			<p align="center"><b>History: </b><input type="number" value={{ stock.amountDrank }} name='history'></p>
-			<p align="center"><b>Stock: </b><input type="number" value={{ stock.amountInStock }} name='stock'></p>
-			<p align="center"><input type="submit" value="Update Beer"></p>
-		</form>
-	{% else %}
-		<p align="center">No beer available.</p>
-	{% endif %}
-</body>
+        {% if beer %}
+            <form method="post" action="/beers/update_beer/{{ beer.untappdId }}/">
+                {% csrf_token %}
+                <div class="row text-center">
+                    <img src={{ beer.imgUrl }}>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-right">
+                        <b>Name: </b><br>
+                        <b>Brewery: </b><br>
+                        <b>Style: </b><br>
+                        <b>ABV: </b><br>
+                        <b>History: </b><br>
+                        <b>Stock: </b>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        {{ beer.name }}<br>
+                        {{ beer.breweryName }}<br>
+                        {{ beer.style }}<br>
+                        {{ beer.abv }}<br>
+                        <input type="number" value={{ stock.amountDrank }} name='history'><br>
+                        <input type="number" value={{ stock.amountInStock }} name='stock'>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            No beer available.
+        {% endif %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success _submit{{ beer.untappdId }}" data-dismiss="modal">Update Beer</button>
+      </div>
+    </div>
+  </div>
+</div>
