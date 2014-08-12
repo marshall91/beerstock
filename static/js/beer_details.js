@@ -3,19 +3,18 @@ window.onload = function () {
     $.each($updateButtons, function () {
         $(this).on('click', function () {
             var id = $(this).val();
+            var $modal = $('._updateModal');
+            var $modalBody = $modal.find('.modal-body');
+            $modalBody.load('/static/html/loading.html');
+            $modal.modal();
             $.ajax({
                 url: '/beers/update_beer/' + id + '/',
                 type: 'get',
                 success: function (data) {
-                    var $modal = $('._updateModal' + id);
-                    if($modal.length === 0) {
-                        $('._beer_box' + id).append(data);
-                        $('._updateSubmit' + id).on('click', function () {
-                            $modal.find('form').submit();
-                        });
-                        $modal = $('._updateModal' + id);
-                    }
-                    $modal.modal();
+                    $modalBody.html(data);
+                    $('._updateSubmit').on('click', function () {
+                        $modal.find('form').submit();
+                    });
                 }
             });
         });
@@ -25,19 +24,18 @@ window.onload = function () {
     $.each($checkoutButtons, function () {
         $(this).on('click', function () {
             var id = $(this).val();
+            var $modal = $('._checkoutModal');
+            var $modalBody = $modal.find('.modal-body');
+            $modalBody.load('/static/html/loading.html');
+            $modal.modal();
             $.ajax({
                 url: '/beers/checkout_beer/' + id + '/',
                 type: 'get',
                 success: function (data) {
-                    var $modal = $('._checkoutModal' + id);
-                    if($modal.length === 0) {
-                        $('._beer_box' + id).append(data);
-                        $('._checkoutSubmit' + id).on('click', function () {
+                    $modalBody.html(data);
+                    $('._checkoutSubmit').on('click', function () {
                             $modal.find('form').submit();
-                        });
-                        $modal = $('._checkoutModal' + id);
-                    }
-                    $modal.modal();
+                    });
                 }
             });
         })
@@ -45,15 +43,14 @@ window.onload = function () {
 
     var $historyButton = $('._moreHistoryButton');
     $historyButton.on('click', function () {
+        $('._loading').load('/static/html/loading.html');
         $.ajax({
             url: '/beers/more_history/' + $historyButton.val() +'/',
             type: 'get',
             success: function (data) {
+                $('._loadingIndicator').remove();
                 $('._moreHistory').before(data);
                 $historyButton.val(parseInt($historyButton.val())+1);
-            },
-            failure: function (data) {
-                alert('AJAX failed');
             }
         });
     });
