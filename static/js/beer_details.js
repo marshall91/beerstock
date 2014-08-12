@@ -1,4 +1,17 @@
 window.onload = function () {
+    function increase ($modal, type) {
+        var stock = parseInt($modal.find('._'+type+'Input').val());
+        $modal.find('._'+type+'Input').val(stock+1);
+        $modal.find('._'+type).html(stock+1);
+    }
+    function decrease ($modal, type) {
+        var stock = parseInt($modal.find('._'+type+'Input').val());
+        if (stock !== 0){
+            $modal.find('._'+type+'Input').val(stock-1);
+            $modal.find('._'+type).html(stock-1);
+        }
+    }
+
     var $updateButtons = $('._updateButton');
     $.each($updateButtons, function () {
         $(this).on('click', function () {
@@ -14,6 +27,18 @@ window.onload = function () {
                     $modalBody.html(data);
                     $('._updateSubmit').on('click', function () {
                         $modal.find('form').submit();
+                    });
+                    $('._updateStockMore').on('click', function () {
+                        increase($modal, 'stock');
+                    });
+                    $('._updateStockLess').on('click', function () {
+                        decrease($modal, 'stock');
+                    });
+                    $('._updateHistoryMore').on('click', function () {
+                        increase($modal, 'history');
+                    });
+                    $('._updateHistoryLess').on('click', function () {
+                        decrease($modal, 'history');
                     });
                 }
             });

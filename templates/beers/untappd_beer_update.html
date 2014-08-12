@@ -10,16 +10,50 @@
                 <b>Brewery: </b><br>
                 <b>Style: </b><br>
                 <b>ABV: </b><br>
-                <b>History: </b><br>
-                <b>Stock: </b>
             </div>
-            <div class="col-md-4 text-left">
+            <div class="col-md-6 text-left">
                 {{ beer.name }}<br>
                 {{ beer.breweryName }}<br>
                 {{ beer.style }}<br>
                 {{ beer.abv }}<br>
-                <input type="number" value={{ stock.amountDrank }} name='history'><br>
-                <input type="number" value={{ stock.amountInStock }} name='stock'>
+            </div>
+        </div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col-md-4 text-right">
+                <b>History: </b>
+            </div>
+            <div class="col-md-1 text-left">
+                <span class="_history">{{ stock.amountDrank }}</span><input type="hidden" value={{ stock.amountDrank }} name='history' class="_historyInput"><br>
+            </div>
+            <div class="col-md-2 text-left">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm _updateHistoryMore">
+                      <span class="glyphicon glyphicon-arrow-up"></span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm _updateHistoryLess">
+                      <span class="glyphicon glyphicon-arrow-down"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row"><span> </span></div><div class="row"><span> </span></div>
+        <div class="row">
+            <div class="col-md-4 text-right">
+                <b>Stock: </b>
+            </div>
+            <div class="col-md-1 text-left">
+                <span class="_stock">{{ stock.amountInStock }}</span><input type="hidden" value={{ stock.amountInStock }} name='stock' class="_stockInput">
+            </div>
+            <div class="col-md-2 text-left">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm _updateStockMore">
+                      <span class="glyphicon glyphicon-arrow-up"></span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm _updateStockLess">
+                      <span class="glyphicon glyphicon-arrow-down"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </form>
