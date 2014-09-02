@@ -15,15 +15,45 @@ from forms import UserForm
 from Untappd import UntappdGetAuthToken
 
 
-def account_info(request):
-    context = Context({
-        'CLIENTID': settings.UNTAPPD_CLIENT_ID,
-        'REDIRECT_URL': "http://www.beerstock.ca/account/account_auth",
-        'user': request.user,
-    })
-    return render(request, 'account/account_info.html', context)
+@login_required
+def account_settings(request):
+    if request.method == "POST":
+        user = User.objects.get(id=request.user.id)
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.email = request.POST['email']
+        if request.POST['new_password'] != '':
+            user.set_password(request.POST['new_password'])
+        user.save()
+        try:
+            member_extra = MemberTable.objects.get(user=user)
+        except ObjectDoesNotExist:
+            member_extra = MemberTable(user=user)
+
+        context = Context({
+            'CLIENTID': settings.UNTAPPD_CLIENT_ID,
+            'REDIRECT_URL': "http://www.beerstock.ca/account/account_auth",
+            'user': user,
+            'member_extra': member_extra,
+            })
+        return render(request, 'account/account_settings.html', context)
+    else:
+        user = request.user
+        try:
+            member_extra = MemberTable.objects.get(user=user)
+        except ObjectDoesNotExist:
+            member_extra = MemberTable(user=user)
+
+        context = Context({
+            'CLIENTID': settings.UNTAPPD_CLIENT_ID,
+            'REDIRECT_URL': "http://www.beerstock.ca/account/account_auth",
+            'user': request.user,
+            'member_extra': member_extra,
+        })
+        return render(request, 'account/account_settings.html', context)
 
 
+@login_required
 def account_update(request):
     code = request.GET.get('code')
     token = UntappdGetAuthToken(code)
